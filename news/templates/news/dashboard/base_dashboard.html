@@ -1,0 +1,35 @@
+{% extends 'news/base.html' %}
+
+{% block content %}
+<div class="dashboard-wrap" style="display: flex; gap: 2rem; margin-top: 2rem;">
+    <!-- Sidebar -->
+    <aside style="width: 250px; background: white; padding: 1.5rem; border-radius: 8px; height: fit-content;">
+        <h3>Dashboard</h3>
+        <ul style="list-style: none; padding: 0;">
+            <li style="margin-bottom: 0.5rem;"><a href="{% url 'dashboard_home' %}"
+                    style="display: block; padding: 0.5rem; border-radius: 4px; {% if request.resolver_match.url_name == 'dashboard_home' %}background: #eee; font-weight: bold;{% endif %}">Overview</a>
+            </li>
+            <li style="margin-bottom: 0.5rem;"><a href="{% url 'dashboard_article_list' %}"
+                    style="display: block; padding: 0.5rem; border-radius: 4px; {% if 'article' in request.resolver_match.url_name %}background: #eee; font-weight: bold;{% endif %}">Articles</a>
+            </li>
+            <li style="margin-bottom: 0.5rem;"><a href="{% url 'dashboard_category_list' %}"
+                    style="display: block; padding: 0.5rem; border-radius: 4px; {% if 'category' in request.resolver_match.url_name %}background: #eee; font-weight: bold;{% endif %}">Categories</a>
+            </li>
+            <li style="margin-bottom: 0.5rem;"><a href="{% url 'dashboard_breaking_news' %}"
+                    style="display: block; padding: 0.5rem; border-radius: 4px; {% if 'breaking' in request.resolver_match.url_name %}background: #eee; font-weight: bold;{% endif %}">Breaking
+                    News</a>
+            </li>
+            <li style="margin-bottom: 0.5rem;"><a href="{% url 'dashboard_settings' %}"
+                    style="display: block; padding: 0.5rem; border-radius: 4px; {% if 'settings' in request.resolver_match.url_name %}background: #eee; font-weight: bold;{% endif %}">Settings</a>
+            </li>
+        </ul>
+        <hr>
+        <a href="/admin/logout/" style="color: red;">Logout</a>
+    </aside>
+
+    <!-- Main Content -->
+    <main style="flex: 1; background: white; padding: 2rem; border-radius: 8px;">
+        {% block dashboard_content %}{% endblock %}
+    </main>
+</div>
+{% endblock %}

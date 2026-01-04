@@ -1,0 +1,43 @@
+{% extends 'news/dashboard/base_dashboard.html' %}
+
+{% block dashboard_content %}
+<div style="display: flex; justify-content: space-between; align-items: center;">
+    <h1>Articles</h1>
+    <a href="{% url 'dashboard_article_create' %}" class="badge" style="padding: 0.5rem 1rem; font-size: 1rem;">+ Add
+        New Article</a>
+</div>
+
+<table style="width: 100%; border-collapse: collapse; margin-top: 1.5rem;">
+    <thead>
+        <tr style="text-align: left; background: #f9fafb; border-bottom: 2px solid #eee;">
+            <th style="padding: 1rem;">Title</th>
+            <th style="padding: 1rem;">Category</th>
+            <th style="padding: 1rem;">Status</th>
+            <th style="padding: 1rem;">Views</th>
+            <th style="padding: 1rem; text-align: right;">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for article in articles %}
+        <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 1rem;">
+                <strong>{{ article.title }}</strong><br>
+                <small class="text-muted">{{ article.published_at|date:"Y-m-d H:i" }}</small>
+            </td>
+            <td style="padding: 1rem;">{{ article.category.name }}</td>
+            <td style="padding: 1rem;">
+                <span class="badge"
+                    style="background: {% if article.status == 'published' %}green{% else %}orange{% endif %};">{{
+                    article.status }}</span>
+            </td>
+            <td style="padding: 1rem;">{{ article.views }}</td>
+            <td style="padding: 1rem; text-align: right;">
+                <a href="{% url 'dashboard_article_edit' article.pk %}"
+                    style="margin-right: 0.5rem; color: blue;">Edit</a>
+                <a href="{% url 'dashboard_article_delete' article.pk %}" style="color: red;">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

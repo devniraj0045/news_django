@@ -1,0 +1,32 @@
+{% extends 'news/dashboard/base_dashboard.html' %}
+
+{% block dashboard_content %}
+<div style="display: flex; justify-content: space-between; align-items: center;">
+    <h1>Categories</h1>
+    <a href="{% url 'dashboard_category_create' %}" class="badge" style="padding: 0.5rem 1rem; font-size: 1rem;">+ Add
+        New Category</a>
+</div>
+
+<table style="width: 100%; border-collapse: collapse; margin-top: 1.5rem;">
+    <thead>
+        <tr style="text-align: left; background: #f9fafb; border-bottom: 2px solid #eee;">
+            <th style="padding: 1rem;">Name</th>
+            <th style="padding: 1rem;">Slug</th>
+            <th style="padding: 1rem; text-align: right;">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for category in categories %}
+        <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 1rem; font-weight: bold;">{{ category.name }}</td>
+            <td style="padding: 1rem;">{{ category.slug }}</td>
+            <td style="padding: 1rem; text-align: right;">
+                <a href="{% url 'dashboard_category_edit' category.pk %}"
+                    style="margin-right: 0.5rem; color: blue;">Edit</a>
+                <a href="{% url 'dashboard_category_delete' category.pk %}" style="color: red;">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

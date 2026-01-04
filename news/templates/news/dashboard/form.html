@@ -1,0 +1,27 @@
+{% extends 'news/dashboard/base_dashboard.html' %}
+
+{% block dashboard_content %}
+<h1>{{ title }}</h1>
+
+<form method="post" enctype="multipart/form-data" style="max-width: 800px; margin-top: 1.5rem;">
+    {% csrf_token %}
+    {% for field in form %}
+    <div style="margin-bottom: 1.5rem;">
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">{{ field.label }}</label>
+        {{ field }}
+        {% if field.help_text %}
+        <small class="text-muted" style="display: block; margin-top: 0.2rem;">{{ field.help_text }}</small>
+        {% endif %}
+        {% if field.errors %}
+        <div style="color: red; font-size: 0.9rem;">{{ field.errors }}</div>
+        {% endif %}
+    </div>
+    {% endfor %}
+
+    <div style="margin-top: 2rem;">
+        <button type="submit" class="badge"
+            style="border: none; cursor: pointer; padding: 1rem 2rem; font-size: 1rem;">Save</button>
+        <a href="javascript:history.back()" style="margin-left: 1rem; color: #666;">Cancel</a>
+    </div>
+</form>
+{% endblock %}

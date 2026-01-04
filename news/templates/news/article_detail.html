@@ -1,0 +1,168 @@
+{% extends 'news/base.html' %}
+
+{% block content %}
+<style>
+    .article-container {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 3rem;
+    }
+
+    .main-article h1 {
+        font-size: 3rem;
+        line-height: 1.1;
+        margin-bottom: 1rem;
+    }
+
+    .meta-data {
+        margin-bottom: 2rem;
+        color: #666;
+        font-size: 0.9rem;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 1rem;
+    }
+
+    .featured-img {
+        width: 100%;
+        max-height: 500px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+    }
+
+    .article-body {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: #333;
+    }
+
+    .related-section {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+    }
+
+    .related-item {
+        margin-bottom: 1.5rem;
+        border-bottom: 1px solid #f3f4f6;
+        padding-bottom: 1rem;
+    }
+
+    .related-item:last-child {
+        border: none;
+    }
+
+    .related-item h4 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.1rem;
+    }
+
+    @media(max-width: 900px) {
+        .article-container {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.8rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-family: inherit;
+    }
+</style>
+
+<div class="article-container">
+    <article class="main-article">
+        <span class="badge" style="font-size: 1rem; margin-bottom: 1rem; display: inline-block;">{{
+            article.category.name }}</span>
+        <h1>{{ article.title }}</h1>
+
+        <div class="meta-data">
+            <span>By <strong>{{ article.author.username|default:"OnlineKhabar" }}</strong></span> |
+            <span>{{ article.published_at|date:"F d, Y h:i A" }}</span> |
+            <span>{{ article.views }} Views</span>
+        </div>
+
+        {% if article.tags.all %}
+        <div class="tags" style="margin-bottom: 1rem;">
+            {% for tag in article.tags.all %}
+            <a href="{% url 'tag_detail' tag.slug %}" class="badge"
+                style="background: #9ca3af; margin-right: 0.5rem;">#{{ tag.name }}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if article.image %}
+        <img src="{{ article.image.url }}" alt="{{ article.title }}" class="featured-img">
+        {% endif %}
+
+        <div class="article-body">
+            {{ article.content|linebreaks }}
+        </div>
+
+        <hr style="margin: 3rem 0; border: 0; border-top: 1px solid #eee;">
+
+        <!-- Comments Section -->
+        <div class="comments-section" id="comments">
+            <h3>{{ comments.count }} Comments</h3>
+
+            <!-- Comment Form -->
+            <div style="background: #f9fafb; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+                <h4 style="margin-top:0;">Leave a Comment</h4>
+                <form method="post">
+                    {% csrf_token %}
+                    <div style="margin-bottom: 1rem;">
+                        {{ form.name }}
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        {{ form.email }}
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        {{ form.body }}
+                    </div>
+                    <button type="submit" class="badge"
+                        style="border: none; cursor: pointer; padding: 0.8rem 1.5rem; font-size: 1rem;">Post
+                        Comment</button>
+                    <small>Comments are moderated.</small>
+                </form>
+            </div>
+
+            <!-- Comment List -->
+            <div class="comment-list">
+                {% for comment in comments %}
+                <div class="comment-item"
+                    style="margin-bottom: 1.5rem; border-bottom: 1px solid #f3f4f6; padding-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <strong>{{ comment.name }}</strong>
+                        <small class="text-muted">{{ comment.created_at|timesince }} ago</small>
+                    </div>
+                    <p style="margin: 0; color: #4b5563;">{{ comment.body }}</p>
+                </div>
+                {% empty %}
+                <p>No comments yet. Be the first to start the discussion!</p>
+                {% endfor %}
+            </div>
+        </div>
+    </article>
+
+    <aside class="sidebar">
+        <div class="related-section">
+            <h3
+                style="margin-top:0; border-bottom: 2px solid var(--primary); padding-bottom: 0.5rem; display: inline-block;">
+                Related News</h3>
+
+            {% for related in related_articles %}
+            <div class="related-item">
+                <a href="{% url 'article_detail' related.slug %}">
+                    <h4>{{ related.title }}</h4>
+                </a>
+                <small class="text-muted">{{ related.published_at|timesince }} ago</small>
+            </div>
+            {% empty %}
+            <p>No related news.</p>
+            {% endfor %}
+        </div>
+    </aside>
+</div>
+{% endblock %}
