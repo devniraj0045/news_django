@@ -246,3 +246,15 @@ def dashboard_breaking_news(request):
     else:
         form = BreakingNewsForm(instance=config)
     return render(request, 'news/dashboard/form.html', {'form': form, 'title': 'Manage Breaking News'})
+
+@staff_member_required
+def dashboard_activity_log(request):
+    from .models_activity import ActivityLog
+    
+    user_id = request.GET.get('user_id')
+    if user_id:
+        logs = ActivityLog.objects.filter(user_id=user_id).order_by('-timestamp')
+    else:
+        logs = ActivityLog.objects.all().order_by('-timestamp')
+        
+    return render(request, 'news/dashboard/activity_log.html', {'logs': logs})

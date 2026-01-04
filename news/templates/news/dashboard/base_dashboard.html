@@ -25,6 +25,10 @@
                         <li style="margin-bottom: 0.5rem;"><a href="{% url 'dashboard_settings' %}"
                                         style="display: block; padding: 0.5rem; border-radius: 4px; {% if 'settings' in request.resolver_match.url_name %}background: #eee; font-weight: bold;{% endif %}">Settings</a>
                         </li>
+                        <li style="margin-bottom: 0.5rem;"><a href="{% url 'dashboard_activity_log' %}"
+                                        style="display: block; padding: 0.5rem; border-radius: 4px; {% if 'activity' in request.resolver_match.url_name %}background: #eee; font-weight: bold;{% endif %}">Activity
+                                        Log</a>
+                        </li>
                 </ul>
                 <hr>
                 <a href="/admin/logout/" style="color: red;">Logout</a>

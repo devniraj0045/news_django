@@ -26,4 +26,5 @@ urlpatterns = [
     
     path('dashboard/settings/', views.dashboard_settings, name='dashboard_settings'),
     path('dashboard/breaking-news/', views.dashboard_breaking_news, name='dashboard_breaking_news'),
+    path('dashboard/activity/', views.dashboard_activity_log, name='dashboard_activity_log'),
 ]
