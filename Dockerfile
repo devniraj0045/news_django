@@ -4,9 +4,15 @@ FROM python:3.12-slim
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+ENV DEBIAN_FRONTEND=noninteractive
+ENV PIP_ROOT_USER_ACTION=ignore
 
 # Set work directory
 WORKDIR /app
+
+# Create and use virtual environment to satisfy pip warning
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
 
 # Install system dependencies (optional, but often needed for Pillow/DB drivers)
 RUN apt-get update && apt-get install -y \
