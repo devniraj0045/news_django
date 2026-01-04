@@ -14,6 +14,11 @@ urlpatterns = [
     path('dashboard/articles/<int:pk>/edit/', views.dashboard_article_edit, name='dashboard_article_edit'),
     path('dashboard/articles/<int:pk>/delete/', views.dashboard_article_delete, name='dashboard_article_delete'),
     
+    # Trash / Backup
+    path('dashboard/trash/', views.dashboard_trash, name='dashboard_trash'),
+    path('dashboard/trash/restore/<int:pk>/', views.dashboard_restore_article, name='dashboard_restore_article'),
+    path('dashboard/trash/force-delete/<int:pk>/', views.dashboard_force_delete_article, name='dashboard_force_delete_article'),
+    
     path('dashboard/categories/', views.dashboard_category_list, name='dashboard_category_list'),
     path('dashboard/categories/new/', views.dashboard_category_create, name='dashboard_category_create'),
     path('dashboard/categories/<int:pk>/edit/', views.dashboard_category_edit, name='dashboard_category_edit'),

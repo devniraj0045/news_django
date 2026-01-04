@@ -1,0 +1,41 @@
+{% extends 'news/dashboard/base_dashboard.html' %}
+
+{% block dashboard_content %}
+<div class="card">
+    <h2 style="margin-bottom: 2rem; color: var(--dash-dark);">Trashed Articles</h2>
+
+    <table class="dash-table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Deleted Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for article in articles %}
+            <tr>
+                <td>{{ article.title }}</td>
+                <td style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem;">
+                    <img src="https://ui-avatars.com/api/?name={{ article.author.username }}&background=random&color=fff&size=24"
+                        alt="{{ article.author.username }}" style="width: 24px; height: 24px; border-radius: 50%;">
+                    {{ article.author.username }}
+                </td>
+                <td>{{ article.updated_at|date:"M d, Y" }}</td>
+                <td>
+                    <a href="{% url 'dashboard_restore_article' article.pk %}" class="dash-btn"
+                        style="background: green; margin-right: 0.5rem;">Restore</a>
+                    <a href="{% url 'dashboard_force_delete_article' article.pk %}" class="dash-btn"
+                        style="background: red;">Delete Forever</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" style="padding: 2rem; text-align: center;">Trash is empty.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

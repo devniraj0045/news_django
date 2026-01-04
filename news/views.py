@@ -125,7 +125,7 @@ def dashboard_home(request):
 # --- Article CRUD ---
 @staff_member_required
 def dashboard_article_list(request):
-    articles = Article.objects.all().order_by('-created_at')
+    articles = Article.objects.filter(is_deleted=False).order_by('-created_at')
     return render(request, 'news/dashboard/article_list.html', {'articles': articles})
 
 @staff_member_required
@@ -144,7 +144,7 @@ def dashboard_article_create(request):
 
 @staff_member_required
 def dashboard_article_edit(request, pk):
-    article = get_object_or_404(Article, pk=pk)
+    article = get_object_or_404(Article, pk=pk, is_deleted=False)
     if request.method == 'POST':
         form = ArticleForm(request.POST, request.FILES, instance=article)
         if form.is_valid():
@@ -158,9 +158,31 @@ def dashboard_article_edit(request, pk):
 def dashboard_article_delete(request, pk):
     article = get_object_or_404(Article, pk=pk)
     if request.method == 'POST':
-        article.delete()
+        article.is_deleted = True # Soft Delete
+        article.save()
         return redirect('dashboard_article_list')
     return render(request, 'news/dashboard/confirm_delete.html', {'object': article})
+
+# TRASH / BACKUP VIEWS
+@staff_member_required
+def dashboard_trash(request):
+    deleted_articles = Article.objects.filter(is_deleted=True).order_by('-updated_at')
+    return render(request, 'news/dashboard/trash.html', {'articles': deleted_articles})
+
+@staff_member_required
+def dashboard_restore_article(request, pk):
+    article = get_object_or_404(Article, pk=pk, is_deleted=True)
+    article.is_deleted = False
+    article.save()
+    return redirect('dashboard_trash')
+
+@staff_member_required
+def dashboard_force_delete_article(request, pk):
+    article = get_object_or_404(Article, pk=pk, is_deleted=True)
+    if request.method == 'POST':
+        article.delete() # Permanent Delete
+        return redirect('dashboard_trash')
+    return render(request, 'news/dashboard/confirm_delete.html', {'object': article, 'permanent': True})
 
 # --- Category CRUD ---
 @staff_member_required

@@ -21,7 +21,15 @@
         {% for article in articles %}
         <tr style="border-bottom: 1px solid #eee;">
             <td style="padding: 1rem;">
-                <strong>{{ article.title }}</strong><br>
+                <strong>{{ article.title }}</strong>
+            </td>
+            <td style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem;">
+                <img src="https://ui-avatars.com/api/?name={{ article.author.username }}&background=random&color=fff&size=24"
+                    alt="{{ article.author.username }}" style="width: 24px; height: 24px; border-radius: 50%;">
+                {{ article.author.username }}
+            </td>
+            <td style="padding: 1rem;">{{ article.created_at|date:"M d, Y" }}</td>
+            <td style="padding: 1rem;">
                 <small class="text-muted">{{ article.published_at|date:"Y-m-d H:i" }}</small>
             </td>
             <td style="padding: 1rem;">{{ article.category.name }}</td>
